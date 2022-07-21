@@ -146,8 +146,10 @@
         if (!ethereum) {
           return;
         }
+        console.log('passa2')
 
         const accounts = await ethereum.request({ method: "eth_requestAccounts" }) ;
+        console.log('passa')
 
         console.log("Connected", accounts[0])
         //await setupEventListener()
