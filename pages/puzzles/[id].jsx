@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useEffect } from 'react';
-import { useFetch } from "../../lib/fetcher";
 import { useRouter } from 'next/router';
+import { FaTrophy } from 'react-icons/fa'
+import { IconButton } from '@mui/material';
+import HighscoreModal from '../../components/HighscoreModal'
 
 export default function Puzzle({}) {
     const router = useRouter();
@@ -9,8 +11,8 @@ export default function Puzzle({}) {
         return (<div></div>);
     }
 
-    const scoresResponse = useFetch(`/api/scores?id=${router.query.id}`);
-    const globalScoresResponse = useFetch(`/api/global-scores?id=${router.query.id}`);
+    const [open, setIsOpen] = useState(false)
+    const [isWinner, setIsWinner] = useState(false)
 
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
@@ -63,6 +65,7 @@ export default function Puzzle({}) {
 
     if (winner) {
         setRunning(false)
+        setIsWinner(true)
     }
 
     return (
@@ -71,6 +74,10 @@ export default function Puzzle({}) {
         <div>Loading…</div>
         ) : (
             <>
+                <HighscoreModal open={open} handleClose={() => { setIsOpen(false) }}/>
+                <IconButton className='highscore-icon-button' onClick={() => { setIsOpen(true) }} sx={{ mt: '2%', background: 'white', '&:hover': { background: 'lightgray' } }}>
+                    <FaTrophy color='#ffd700' />
+                </IconButton>
                 <div className="stopwatch">
                     <div className="numbers">
                         <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
@@ -129,34 +136,6 @@ export default function Puzzle({}) {
                 <input type="radio" id="h-left" name="h-horazontal" defaultChecked={true} />
                 <input type="radio" id="h-center" name="h-horazontal" onChange={() => { setHCenterhecked(!hCenterChecked) }}  />
                 <input type="radio" id="h-right" name="h-horazontal" />
-
-                <div className="highscore-box global-score">
-                    <h4>Top global</h4>
-                    {globalScoresResponse.data.length > 0 ?
-                    (<div className='score-table'>
-                        <div className="score-table-header">
-                            <div>Name</div>
-                            <div>Time</div>
-                        </div>
-                        <div className="score-table-body">
-                            {
-                                globalScoresResponse.data.map((score) => {
-                                    return (
-                                        <div className="score-table-body-row" key={score.name}>
-                                            <div className="score-table-body-cell">
-                                                {score.name}
-                                            </div>
-                                            <div className="score-table-body-cell">
-                                                {score.time}
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>)
-                    : (<div>Without data</div>)}
-                </div>
                 <div className="board" onClick={() => { setRunning(true) }}>
                     <div className="peice-a">
                         <label htmlFor="a-up"></label>
@@ -231,37 +210,10 @@ export default function Puzzle({}) {
                     <div className="peice-g img"></div>
                     <div className="peice-h img"></div>
                 </div>
-                <div className="highscore-box score">
-                    <h4>Top in nft</h4>
-                    {scoresResponse.data.length > 0 ?
-                    (<div className='score-table'>
-                        <div className="score-table-header">
-                            <div>Name</div>
-                            <div>Time</div>
-                        </div>
-                        <div className="score-table-body">
-                            {
-                                scoresResponse.data.map((score) => {
-                                    return (
-                                        <div className="score-table-body-row" key={score.name}>
-                                            <div className="score-table-body-cell">
-                                                {score.name}
-                                            </div>
-                                            <div className="score-table-body-cell">
-                                                {score.time}
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>)
-                    : (<div>Without data</div>)}
 
-                </div>
                 <div className="winner">WINNER!</div>
             </>
-            )}
+        )}
 
         <style jsx>{`
             input[type="radio"]{
@@ -482,7 +434,6 @@ export default function Puzzle({}) {
                 --x:40em;
             }
             .winner{
-                font-family:arial;
                 color: #fff;
                 text-align: center;
                 font-size: 4vw;
@@ -493,7 +444,7 @@ export default function Puzzle({}) {
                 top:calc(50% - 1em);
                 line-height: 2em;
                 background: red;
-                // transform:scale(0);
+                transform:scale(0);
             }
             #a-up:checked ~ #a-left:checked ~ #b-up:checked ~ #b-center:checked ~ #c-up:checked ~ #c-right:checked ~ #d-middle:checked ~ #d-left:checked ~ #e-middle:checked ~ #e-center:checked ~ #f-middle:checked ~ #f-right:checked ~ #g-down:checked ~ #g-left:checked ~ #h-down:checked ~ #h-center:checked ~ .winner{
                 animation:winner 3s 1 1s;
@@ -505,7 +456,6 @@ export default function Puzzle({}) {
 
             .selectBG{
                 display:inline-block;
-                font-family:arial;
                 font-size:2vmin;
                 width:8em;
                 text-align:center;
@@ -525,28 +475,13 @@ export default function Puzzle({}) {
             }
             .stopwatch {
                 color: white;
+                font-family: Permanent Marker;
                 font-size: 24px;
-                margin-top: 3%
-            }
-            .highscore-box {
-                position: absolute;
-                height: 26em;
-                padding: 20px;
-                border-radius: 29px;
-                background: white;
-                width: 12em;
-            }
-            .highscore-box.global-score {
-                top: calc(50% - 13em);
-                left: calc(50% - 30em);
-            }
-            .highscore-box.score {
-                top: calc(50% - 13em);
-                right: calc(50% - 30em);
             }
         `}</style>
         <style jsx global>{`
             body{
+                font-family: "Droid Sans", arial, verdana, sans-serif;
                 margin:0;
                 background:#222;
                 text-align:center;

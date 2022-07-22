@@ -12,5 +12,7 @@ export default async (req, res) => {
     .find({ puzzle })
     .toArray()
 
+    console.log(scores);
+
   return res.status(200).json({ scores: scores })
 }
