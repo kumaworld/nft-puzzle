@@ -9,8 +9,9 @@ import { NUMBER_OF_PLAYERS_RANKING } from '../../utils/constants';
 import DialogRecordBreaker from '../../components/DialogRecordBreaker';
 import MuiAlert from '@mui/material/Alert';
 import { GrPowerReset } from "react-icons/gr";
+import { getNftById, getAllNfts } from '../../lib/api';
 
-export default function Puzzle({}) {
+export default function Puzzle({ nft }) {
     const router = useRouter();
     if (!router.isFallback && !router.query.id) {
         return (<div></div>);
@@ -20,6 +21,7 @@ export default function Puzzle({}) {
     const [isWinner, setIsWinner] = useState(false)
     const [openRecordBreak, setOpenRecordBreak] = useState(false)
     const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [image, setImage] = useState('')
 
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
@@ -567,7 +569,7 @@ export default function Puzzle({}) {
                 border-bottom-color:teal;
             }
             #cage:checked ~ * .peice-a.img, .peice-b.img, .peice-c.img, .peice-d.img, .peice-e.img, .peice-f.img, .peice-g.img, .peice-h.img{
-                background-image:url(https://media.raritysniper.com/bored-ape-yacht-club/66-600.webp?cacheId=2);
+                background-image:url(${nft.imgUrl});
             }
             .stopwatch {
                 color: white;
@@ -586,3 +588,29 @@ export default function Puzzle({}) {
         </>
     )
 }
+
+export async function getStaticPaths() {
+    const nfts = getAllNfts();
+
+    return {
+      paths: nfts.map((nft, index) => {
+        return {
+          params: {
+            id: index.toString(),
+          },
+        };
+      }),
+      fallback: false,
+    };
+}
+
+
+export async function getStaticProps({ params }) {
+    const nft = getNftById(params.id)
+
+    return {
+      props: {
+        nft
+      },
+    };
+  }
