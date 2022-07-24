@@ -12,7 +12,12 @@ function getAllNfts([] = []) {
 
 module.exports = {
   reactStrictMode: true,
-
+  swcMinify: true,
+  assetPrefix: '.',
+  images: {
+    loader: "imgix",
+    path: "https://noop/",
+  },
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
 
