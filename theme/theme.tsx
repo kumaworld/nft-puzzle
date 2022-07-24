@@ -81,7 +81,7 @@ const appTheme = (): Theme =>
         MuiCssBaseline: {
           styleOverrides: {
             body: {
-              backgroundColor: '#ffc8a269',
+              backgroundColor: '#000',
             },
           },
         },
