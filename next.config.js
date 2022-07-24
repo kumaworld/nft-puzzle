@@ -3,7 +3,7 @@ const { join } = require('path')
 
 const postsDirectory = join(process.cwd(), 'assets/nft')
 
-export function getNftById(index) {
+function getNftById(index) {
   const fullPath = join(postsDirectory, `${index}.json`)
   const json = fs.readFileSync(fullPath, 'utf8')
 
