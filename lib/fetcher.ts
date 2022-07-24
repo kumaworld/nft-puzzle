@@ -15,6 +15,7 @@ export async function useFetch(url: string, method = HTTP_METHODS.GET, body: any
         ...(body != null && { body: JSON.stringify(body) }),
       }
     );
+
     data = await response.json();
 
   } catch(error) {
