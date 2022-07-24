@@ -36,7 +36,7 @@ module.exports = {
       const nfts = getAllNfts()
 
       nfts.forEach((nft, index) => {
-        paths[`/puzzles/${index}`] = { page: `/puzzles/${index}`, query: { id: index } }
+        paths[`/puzzles/${index}`] = { page: `/puzzles/[id]`, query: { id: index } }
       })
 
       return paths
