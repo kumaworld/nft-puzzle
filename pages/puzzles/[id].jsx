@@ -2,8 +2,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FaTrophy } from 'react-icons/fa'
-import { IconButton } from '@mui/material';
+import { IconButton, Snackbar, Grid } from '@mui/material';
 import HighscoreModal from '../../components/HighscoreModal'
+import { useFetch } from '../../lib/fetcher';
+import { NUMBER_OF_PLAYERS_RANKING } from '../../utils/constants';
+import DialogRecordBreaker from '../../components/DialogRecordBreaker';
+import MuiAlert from '@mui/material/Alert';
+import { GrPowerReset } from "react-icons/gr";
 
 export default function Puzzle({}) {
     const router = useRouter();
@@ -13,6 +18,8 @@ export default function Puzzle({}) {
 
     const [open, setIsOpen] = useState(false)
     const [isWinner, setIsWinner] = useState(false)
+    const [openRecordBreak, setOpenRecordBreak] = useState(false)
+    const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
@@ -34,14 +41,16 @@ export default function Puzzle({}) {
     const [hCenterChecked, setHCenterhecked] = useState(false);
 
     useEffect(() => {
-        let interval;
+        let interval
+
         if (running) {
-        interval = setInterval(() => {
-            setTime((prevTime) => prevTime + 10);
-        }, 10);
+            interval = setInterval(() => {
+                setTime((prevTime) => prevTime + 10);
+            }, 10);
         } else if (!running) {
-        clearInterval(interval);
+            clearInterval(interval);
         }
+
         return () => clearInterval(interval);
     }, [running]);
 
@@ -63,10 +72,71 @@ export default function Puzzle({}) {
         hCenterChecked &&
         hDownChecked
 
-    if (winner) {
+    useEffect(() => {
+        if (winner) {
+            const saveWinner = async () => {
+                setRunning(false)
+                setIsWinner(true)
+
+                document.querySelectorAll('.board input').forEach((input) => {
+                    (input).disabled = true
+                })
+
+                const scoresResponse = await useFetch(`/api/scores?id=${router.query.id}`);
+                const globalScoresResponse = await useFetch('/api/global-scores');
+
+                let indexOfScoreRecord = -1
+                if (globalScoresResponse.data && globalScoresResponse.data.scores.length > 0) {
+                    indexOfScoreRecord = globalScoresResponse.data.scores.findIndex((value => value.time > time))
+                }
+
+                const breakGlobalRecord = indexOfScoreRecord !== -1 || NUMBER_OF_PLAYERS_RANKING > globalScoresResponse.data.scores.length
+
+
+                let index = -1
+                if (scoresResponse.data && scoresResponse.data.scores.length > 0) {
+                    index = scoresResponse.data.scores.findIndex((value => value.time > time))
+
+                }
+                const breakScoreRecord = index !== -1 || NUMBER_OF_PLAYERS_RANKING > scoresResponse.data.scores.length
+
+                if (breakGlobalRecord || breakScoreRecord) {
+                    setOpenRecordBreak(true)
+                }
+
+            }
+
+            saveWinner()
+        }
+    }, [router.query.id, winner])
+
+    const onClickReset = () => {
         setRunning(false)
-        setIsWinner(true)
+        setTime(0)
+
+        document.querySelectorAll('input').forEach((input) => {
+            (input).checked = false
+        })
+
+        document.getElementById('cage').checked = true
+        document.getElementById('a-middle').checked = true
+        document.getElementById('a-left').checked = true
+        document.getElementById('b-up').checked = true
+        document.getElementById('b-left').checked = true
+        document.getElementById('c-middle').checked = true
+        document.getElementById('c-right').checked = true
+        document.getElementById('d-center').checked = true
+        document.getElementById('d-up').checked = true
+        document.getElementById('e-down').checked = true
+        document.getElementById('e-center').checked = true
+        document.getElementById('f-center').checked = true
+        document.getElementById('f-middle').checked = true
+        document.getElementById('g-right').checked = true
+        document.getElementById('g-up').checked = true
+        document.getElementById('h-down').checked = true
+        document.getElementById('h-left').checked = true
     }
+
 
     return (
         <>
@@ -74,17 +144,39 @@ export default function Puzzle({}) {
         <div>Loading…</div>
         ) : (
             <>
-                <HighscoreModal open={open} handleClose={() => { setIsOpen(false) }}/>
-                <IconButton className='highscore-icon-button' onClick={() => { setIsOpen(true) }} sx={{ mt: '2%', background: 'white', '&:hover': { background: 'lightgray' } }}>
-                    <FaTrophy color='#ffd700' />
-                </IconButton>
-                <div className="stopwatch">
-                    <div className="numbers">
-                        <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-                        <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
-                        <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
-                    </div>
-                </div>
+                <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={() => { setOpenSnackBar(false) }}>
+                    <MuiAlert elevation={6} variant="filled" onClose={() => { setOpenSnackBar(false) }} severity={'success'} sx={{ width: '100%' }}>
+                        Record saved succesfully
+                    </MuiAlert>
+                </Snackbar>
+                <DialogRecordBreaker open={openRecordBreak} handleClose={() => { setOpenRecordBreak(false); } } time={time} onSaveRecord={() => { setOpenSnackBar(true) }}/>
+                <HighscoreModal open={open} handleClose={() => { setIsOpen(false) }} />
+                <Grid container alignItems="center" justifyContent="center" width="100%" mt="2%">
+                    <Grid item xs={4} />
+                    <Grid container item xs={4}>
+                        <Grid item xs={8}>
+                            <div className="stopwatch">
+                                <div className="numbers">
+                                    <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
+                                    <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
+                                    <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
+                                </div>
+                            </div>
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <IconButton className='highscore-icon-button' onClick={() => { setIsOpen(true) }} sx={{ mt: '2%', background: 'white', '&:hover': { background: 'lightgray' } }}>
+                                <FaTrophy color='#ffd700' />
+                            </IconButton>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <IconButton className='highscore-icon-button' onClick={onClickReset} sx={{ mt: '2%', background: 'white', '&:hover': { background: 'lightgray' } }} >
+                                <GrPowerReset color='black' />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={4} />
+                </Grid>
                 <input type="checkbox" id="cheat" />
                 <input type="radio" id="cage" name="image" defaultChecked={true} />
 
@@ -123,7 +215,7 @@ export default function Puzzle({}) {
                 <input type="radio" id="f-down" name="f-vertical" />
                 <input type="radio" id="f-left" name="f-horazontal" />
                 <input type="radio" id="f-center" name="f-horazontal" defaultChecked={true} />
-                <input type="radio" id="f-right" name="f-horazontal" defaultChecked={true} onChange={() => { setFRightChecked(!fRightChecked) }} />
+                <input type="radio" id="f-right" name="f-horazontal" onChange={() => { setFRightChecked(!fRightChecked) }} />
                 <input type="radio" id="g-up" name="g-vertical" defaultChecked={true} />
                 <input type="radio" id="g-middle" name="g-vertical" />
                 <input type="radio" id="g-down" name="g-vertical" onChange={() => { setGDownChecked(!gDownChecked) }} />
@@ -136,7 +228,11 @@ export default function Puzzle({}) {
                 <input type="radio" id="h-left" name="h-horazontal" defaultChecked={true} />
                 <input type="radio" id="h-center" name="h-horazontal" onChange={() => { setHCenterhecked(!hCenterChecked) }}  />
                 <input type="radio" id="h-right" name="h-horazontal" />
-                <div className="board" onClick={() => { setRunning(true) }}>
+                <div className="board" onClick={() => {
+                    if (!winner) {
+                        setRunning(true)
+                    }
+                 }}>
                     <div className="peice-a">
                         <label htmlFor="a-up"></label>
                         <label htmlFor="a-middle"></label>

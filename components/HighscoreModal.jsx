@@ -28,12 +28,12 @@ import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList'
 
-
 import { Public, Panorama } from '@mui/icons-material';
+import { NUMBER_OF_PLAYERS_RANKING } from '../utils/constants';
 
 export default function HighscoreModal({ open, handleClose }) {
     const headers = ['Name', 'Time']
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState('1');
     const router = useRouter();
 
     const [scores, setScores] = useState([])
@@ -41,8 +41,6 @@ export default function HighscoreModal({ open, handleClose }) {
 
     const [isLoadingGlobalScores, setIsLoadingGlobalScores] = useState(true)
     const [isLoadingScores, setIsLoadingScores] = useState(true)
-
-    console.log(scores)
 
     useEffect(() => {
         const getScores = async () => {
@@ -53,7 +51,7 @@ export default function HighscoreModal({ open, handleClose }) {
         }
 
         const getGlobalScores = async () => {
-            const { data } = await useFetch(`/api/global-scores?id=${router.query.id}`);
+            const { data } = await useFetch('/api/global-scores');
 
             setGlobalScores(data?.scores ?? [])
             setIsLoadingGlobalScores(false)
@@ -61,7 +59,7 @@ export default function HighscoreModal({ open, handleClose }) {
 
         getScores()
         getGlobalScores()
-    }, [router.query.id]);
+    }, [router.query.id, open]);
 
     const handleChange = (event, newValue) => {
       setValue(newValue);
@@ -80,7 +78,7 @@ export default function HighscoreModal({ open, handleClose }) {
         <AppBar sx={{ position: 'relative' }}>
         <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Ranking
+            Top ${NUMBER_OF_PLAYERS_RANKING} players
             </Typography>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
                 <Close />
@@ -95,10 +93,10 @@ export default function HighscoreModal({ open, handleClose }) {
                 onChange={handleChange}
                 aria-label="icon position tabs example"
                 >
-                <Tab icon={<Public />}  iconPosition="start" label="Global ranking"  value={1}/>
-                <Tab icon={<Panorama />} iconPosition="start" label="NFT ranking"  value={2}/>
+                <Tab icon={<Public />}  iconPosition="start" label="Global ranking"  value={'1'}/>
+                <Tab icon={<Panorama />} iconPosition="start" label="NFT ranking"  value={'2'}/>
                 </TabList>
-                    <TabPanel value={1}>
+                    <TabPanel value={'1'}>
                         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                             <TableContainer sx={{ maxHeight: 440 }}>
                                 <Table stickyHeader aria-label="sticky table">
@@ -130,7 +128,7 @@ export default function HighscoreModal({ open, handleClose }) {
                                                     {row.name}
                                                 </TableCell>
                                                 <TableCell >
-                                                    {row.time}
+                                                {("0" + Math.floor((row.time / 60000) % 60)).slice(-2)} : {("0" + Math.floor((row.time / 1000) % 60)).slice(-2)} : {("0" + ((row.time / 10) % 100)).slice(-2)}
                                                 </TableCell>
                                             </TableRow>
                                             );
@@ -143,7 +141,7 @@ export default function HighscoreModal({ open, handleClose }) {
                             </TableContainer>
                         </Paper>
                     </TabPanel>
-                    <TabPanel value={2}>
+                    <TabPanel value={'2'}>
                         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                             <TableContainer sx={{ maxHeight: 440 }}>
                                 <Table stickyHeader aria-label="sticky table">
@@ -175,7 +173,7 @@ export default function HighscoreModal({ open, handleClose }) {
                                                     {row.name}
                                                 </TableCell>
                                                 <TableCell >
-                                                    {row.time}
+                                                    {("0" + Math.floor((row.time / 60000) % 60)).slice(-2)} : {("0" + Math.floor((row.time / 1000) % 60)).slice(-2)} : {("0" + ((row.time / 10) % 100)).slice(-2)}
                                                 </TableCell>
                                             </TableRow>
                                             );
