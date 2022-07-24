@@ -19,26 +19,27 @@ function getAllNfts([] = []) {
 
 module.exports = {
   reactStrictMode: true,
-  swcMinify: true,
-  assetPrefix: '.',
-  images: {
-    loader: "imgix",
-    path: "https://noop/",
-  },
+  // swcMinify: true,
+  // assetPrefix: '.',
+  // images: {
+  //   loader: "imgix",
+  //   path: "https://noop/",
+  // },
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
 
     return config;
   },
-  exportPathMap: async function () {
-      let paths = {}
+  // exportPathMap: async function () {
+  //     let paths = {}
 
-      const nfts = getAllNfts()
+  //     // const nfts = getAllNfts()
+  //     // console.log(nfts)
 
-      nfts.forEach((nft, index) => {
-        paths[`/puzzles/${index}`] = { page: `/puzzles/[id]`, query: { id: index } }
-      })
+  //     // nfts.forEach((nft, index) => {
+  //     //   paths[`/puzzles/${index}`] = { page: `/puzzles/[id]`, query: { id: index } }
+  //     // })
 
-      return paths
-  },
+  //     return paths
+  // },
 }

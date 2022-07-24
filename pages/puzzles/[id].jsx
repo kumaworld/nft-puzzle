@@ -13,9 +13,12 @@ import { getNftById, getAllNfts } from '../../lib/api';
 
 export default function Puzzle({ nft }) {
     const router = useRouter();
+
     if (!router.isFallback && !router.query.id) {
         return (<div></div>);
     }
+
+    console.log('passa')
 
     const [open, setIsOpen] = useState(false)
     const [isWinner, setIsWinner] = useState(false)

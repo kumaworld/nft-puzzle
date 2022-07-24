@@ -10,7 +10,10 @@ export function getAllNfts([] = []) {
 }
 
 export function getNftById(index: string) {
+    console.log(index)
     const fullPath = join(postsDirectory, `${index}.json`)
+    console.log(fullPath)
+
     const json = fs.readFileSync(fullPath, 'utf8')
 
     return JSON.parse(json)
