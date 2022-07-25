@@ -75,6 +75,7 @@ export default function Puzzle({ nft }) {
         hCenterChecked &&
         hDownChecked
 
+
     useEffect(() => {
         if (!winner) {
             const saveWinner = async () => {
