@@ -18,8 +18,6 @@ export default function Puzzle({ nft }) {
         return (<div></div>);
     }
 
-    console.log('passa')
-
     const [open, setIsOpen] = useState(false)
     const [isWinner, setIsWinner] = useState(false)
     const [openRecordBreak, setOpenRecordBreak] = useState(false)
