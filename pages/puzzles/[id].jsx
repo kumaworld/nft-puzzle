@@ -76,7 +76,7 @@ export default function Puzzle({ nft }) {
         hDownChecked
 
     useEffect(() => {
-        if (winner) {
+        if (!winner) {
             const saveWinner = async () => {
                 setRunning(false)
                 setIsWinner(true)
@@ -155,8 +155,8 @@ export default function Puzzle({ nft }) {
                 <DialogRecordBreaker open={openRecordBreak} handleClose={() => { setOpenRecordBreak(false); } } time={time} onSaveRecord={() => { setOpenSnackBar(true) }}/>
                 <HighscoreModal open={open} handleClose={() => { setIsOpen(false) }} />
                 <Grid container alignItems="center" justifyContent="center" width="100%" mt="2%">
-                    <Grid item xs={4} />
-                    <Grid container item xs={4}>
+                    <Grid item xs={2} />
+                    <Grid container item xs={8}>
                         <Grid item xs={8}>
                             <div className="stopwatch">
                                 <div className="numbers">
@@ -178,9 +178,9 @@ export default function Puzzle({ nft }) {
                             </IconButton>
                         </Grid>
                     </Grid>
-                    <Grid item xs={4} />
+                    <Grid item xs={2} />
                 </Grid>
-                <input type="checkbox" id="cheat" />
+                {/* <input type="checkbox" id="cheat" /> */}
                 <input type="radio" id="cage" name="image" defaultChecked={true} />
 
                 <input type="radio" id="a-up" name="a-vertical" onChange={() => { setAUpChecked(!aUpChecked) }}/>
