@@ -4,6 +4,7 @@ import { NUMBER_OF_PLAYERS_RANKING } from '../../utils/constants';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { id }= req.query;
+  console.log('scores')
 
   if (!id) return res.json("Página não encontrada!")
 
@@ -16,6 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     .limit(NUMBER_OF_PLAYERS_RANKING)
     .toArray()
 
+  console.log(scores)
 
   return res.status(200).json({ scores: scores })
 }

@@ -90,7 +90,7 @@ export default function Puzzle({ nft }) {
                 const globalScoresResponse = await useFetch('/api/global-scores');
 
                 let indexOfScoreRecord = -1
-                if (globalScoresResponse.data && globalScoresResponse.data.scores.length > 0) {
+                if (globalScoresResponse.data && (globalScoresResponse.data?.scores.length ?? 0) > 0) {
                     indexOfScoreRecord = globalScoresResponse.data.scores.findIndex((value => value.time > time))
                 }
 
@@ -98,7 +98,7 @@ export default function Puzzle({ nft }) {
 
 
                 let index = -1
-                if (scoresResponse.data && scoresResponse.data.scores.length > 0) {
+                if (scoresResponse.data && (scoresResponse.data?.scores.length ?? 0) > 0) {
                     index = scoresResponse.data.scores.findIndex((value => value.time > time))
 
                 }

@@ -20,6 +20,7 @@ export async function useFetch(url: string, method = HTTP_METHODS.GET, body: any
     data = await response.json();
 
   } catch(error) {
+    console.log(error)
     return { data, error }
   }
 
