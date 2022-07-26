@@ -77,7 +77,7 @@ export default function Puzzle({ nft }) {
 
 
     useEffect(() => {
-        if (!winner) {
+        if (winner) {
             console.log(document.querySelectorAll('.board input'))
             const saveWinner = async () => {
                 setRunning(false)
