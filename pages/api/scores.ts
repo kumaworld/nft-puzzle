@@ -3,6 +3,7 @@ import {connectToDatabase} from '../../config/mongodb';
 import { NUMBER_OF_PLAYERS_RANKING } from '../../utils/constants';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log('scores')
   const { id }= req.query;
   console.log('scores')
 
