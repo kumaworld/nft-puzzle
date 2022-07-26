@@ -4,7 +4,6 @@ export async function useFetch(url: string, method = HTTP_METHODS.GET, body: any
   let data;
 
   try {
-    console.log('passa')
     const response = await fetch(
       url,
       {

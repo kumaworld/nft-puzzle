@@ -7,9 +7,7 @@ import { NUMBER_OF_PLAYERS_RANKING } from '../../utils/constants';
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   await useMiddleware(req, res, cors);
 
-  console.log('scores')
-  const { id }= req.query;
-  console.log('scores')
+  const { id } = req.query;
 
   if (!id) return res.json("Página não encontrada!")
 
@@ -21,8 +19,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     .sort({ time: -1 })
     .limit(NUMBER_OF_PLAYERS_RANKING)
     .toArray()
-
-  console.log(scores)
 
   return res.status(200).json({ scores: scores })
 }
