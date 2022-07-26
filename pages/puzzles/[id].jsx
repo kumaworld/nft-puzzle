@@ -78,12 +78,13 @@ export default function Puzzle({ nft }) {
 
     useEffect(() => {
         if (!winner) {
+            console.log(document.querySelectorAll('.board input'))
             const saveWinner = async () => {
                 setRunning(false)
                 setIsWinner(true)
 
                 document.querySelectorAll('.board input').forEach((input) => {
-                    (input).disabled = true
+                    input.disabled = true
                 })
 
                 const scoresResponse = await useFetch(`/api/scores?id=${router.query.id}`);
