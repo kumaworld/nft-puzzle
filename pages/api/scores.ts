@@ -1,8 +1,12 @@
+import cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import {connectToDatabase} from '../../config/mongodb';
+import { useMiddleware } from '../../lib/middleware';
 import { NUMBER_OF_PLAYERS_RANKING } from '../../utils/constants';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  await useMiddleware(req, res, cors);
+
   console.log('scores')
   const { id }= req.query;
   console.log('scores')
