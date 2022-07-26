@@ -14,7 +14,6 @@ export async function useFetch(url: string, method = HTTP_METHODS.GET, body: any
           Accept: 'application/json',
         },
         ...(body != null && { body: JSON.stringify(body) }),
-        mode: 'no-cors'
       }
     );
     console.log(response)
