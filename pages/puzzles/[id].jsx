@@ -19,29 +19,11 @@ export default function Puzzle({ nft }) {
     }
 
     const [open, setIsOpen] = useState(false)
-    const [isWinner, setIsWinner] = useState(false)
     const [openRecordBreak, setOpenRecordBreak] = useState(false)
     const [openSnackBar, setOpenSnackBar] = useState(false);
-    const [image, setImage] = useState('')
 
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
-    const [aUpChecked, setAUpChecked] = useState(false);
-    const [aLeftChecked, setALeftChecked] = useState(true);
-    const [bUpChecked, setBUpChecked] = useState(true);
-    const [bCenterChecked, setBcenterChecked] = useState(false);
-    const [cUpChecked, setCUpChecked] = useState(false);
-    const [cRightChecked, setCRightChecked] = useState(true);
-    const [dMiddleChecked, setDMiddleChecked] = useState(false);
-    const [dLeftChecked, setDLeftChecked] = useState(false);
-    const [eMiddleChecked, setEMiddleChecked] = useState(false);
-    const [eCenterChecked, setECenterChecked] = useState(true);
-    const [fMiddleChecked, setFMiddleChecked] = useState(true);
-    const [fRightChecked, setFRightChecked] = useState(false);
-    const [gDownChecked, setGDownChecked] = useState(false);
-    const [gLeftChecked, setGleftChecked] = useState(false);
-    const [hDownChecked, setHDownhecked] = useState(true);
-    const [hCenterChecked, setHCenterhecked] = useState(false);
 
     useEffect(() => {
         let interval
@@ -57,23 +39,26 @@ export default function Puzzle({ nft }) {
         return () => clearInterval(interval);
     }, [running]);
 
-    const winner = aUpChecked &&
-        aLeftChecked &&
-        bCenterChecked &&
-        bUpChecked &&
-        cUpChecked &&
-        cRightChecked &&
-        dMiddleChecked &&
-        dLeftChecked &&
-        dMiddleChecked &&
-        eMiddleChecked &&
-        eCenterChecked &&
-        fMiddleChecked &&
-        fRightChecked &&
-        gDownChecked &&
-        gLeftChecked &&
-        hCenterChecked &&
-        hDownChecked
+
+    let winner = false
+    if (typeof document !== "undefined") {
+        winner = document.getElementById('a-up').checked
+        && document.getElementById('a-left').checked
+        && document.getElementById('b-up').checked
+        && document.getElementById('b-center').checked
+        && document.getElementById('c-up').checked
+        && document.getElementById('c-right').checked
+        && document.getElementById('d-middle').checked
+        && document.getElementById('d-left').checked
+        && document.getElementById('e-middle').checked
+        && document.getElementById('e-center').checked
+        && document.getElementById('f-middle').checked
+        && document.getElementById('f-right').checked
+        && document.getElementById('g-down').checked
+        && document.getElementById('g-left').checked
+        && document.getElementById('h-down').checked
+        && document.getElementById('h-center').checked
+    }
 
 
     useEffect(() => {
@@ -81,7 +66,6 @@ export default function Puzzle({ nft }) {
             console.log(document.querySelectorAll('.board input'))
             const saveWinner = async () => {
                 setRunning(false)
-                setIsWinner(true)
 
                 document.querySelectorAll('.board input').forEach((input) => {
                     input.disabled = true
@@ -149,6 +133,11 @@ export default function Puzzle({ nft }) {
         <div>Loading…</div>
         ) : (
             <>
+                <audio
+                    src='/Labyrinth_preview.mp3'
+                    autoPlay={true}
+                    loop
+                />
                 <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={() => { setOpenSnackBar(false) }}>
                     <MuiAlert elevation={6} variant="filled" onClose={() => { setOpenSnackBar(false) }} severity={'success'} sx={{ width: '100%' }}>
                         Record saved succesfully
@@ -185,53 +174,53 @@ export default function Puzzle({ nft }) {
                 {/* <input type="checkbox" id="cheat" /> */}
                 <input type="radio" id="cage" name="image" defaultChecked={true} />
 
-                <input type="radio" id="a-up" name="a-vertical" onChange={() => { setAUpChecked(!aUpChecked) }}/>
+                <input type="radio" id="a-up" name="a-vertical" />
                 <input type="radio" id="a-middle" name="a-vertical" defaultChecked={true} />
                 <input type="radio" id="a-down" name="a-vertical" />
-                <input type="radio" id="a-left" name="a-horazontal" defaultChecked={true} onChange={() => { setALeftChecked(!aLeftChecked) }} />
+                <input type="radio" id="a-left" name="a-horazontal" defaultChecked={true} />
                 <input type="radio" id="a-center" name="a-horazontal" />
                 <input type="radio" id="a-right" name="a-horazontal" />
-                <input type="radio" id="b-up" name="b-vertical" defaultChecked={true} onChange={() => { setBUpChecked(!bUpChecked) }} />
+                <input type="radio" id="b-up" name="b-vertical" defaultChecked={true} />
                 <input type="radio" id="b-middle" name="b-vertical" />
                 <input type="radio" id="b-down" name="b-vertical" />
                 <input type="radio" id="b-left" name="b-horazontal" defaultChecked={true} />
-                <input type="radio" id="b-center" name="b-horazontal" onChange={() => { setBcenterChecked(!bCenterChecked) }}/>
+                <input type="radio" id="b-center" name="b-horazontal"/>
                 <input type="radio" id="b-right" name="b-horazontal" />
-                <input type="radio" id="c-up" name="c-vertical" onChange={() => { setCUpChecked(!cUpChecked) }} />
+                <input type="radio" id="c-up" name="c-vertical" />
                 <input type="radio" id="c-middle" name="c-vertical" defaultChecked={true} />
                 <input type="radio" id="c-down" name="c-vertical" />
                 <input type="radio" id="c-left" name="c-horazontal" />
                 <input type="radio" id="c-center" name="c-horazontal" />
-                <input type="radio" id="c-right" name="c-horazontal" defaultChecked={true} onChange={() => { setCRightChecked(!cRightChecked) }} />
+                <input type="radio" id="c-right" name="c-horazontal" defaultChecked={true} />
                 <input type="radio" id="d-up" name="d-vertical" defaultChecked={true} />
-                <input type="radio" id="d-middle" name="d-vertical" onChange={() => { setDMiddleChecked(!dMiddleChecked) }} />
+                <input type="radio" id="d-middle" name="d-vertical" />
                 <input type="radio" id="d-down" name="d-vertical" />
-                <input type="radio" id="d-left" name="d-horazontal" onChange={() => { setDLeftChecked(!dLeftChecked) }} />
+                <input type="radio" id="d-left" name="d-horazontal" />
                 <input type="radio" id="d-center" name="d-horazontal" defaultChecked={true} />
                 <input type="radio" id="d-right" name="d-horazontal" />
                 <input type="radio" id="e-up" name="e-vertical" />
-                <input type="radio" id="e-middle" name="e-vertical" onChange={() => { setEMiddleChecked(!eMiddleChecked) }}/>
+                <input type="radio" id="e-middle" name="e-vertical"/>
                 <input type="radio" id="e-down" name="e-vertical" defaultChecked={true} />
                 <input type="radio" id="e-left" name="e-horazontal" />
-                <input type="radio" id="e-center" name="e-horazontal" defaultChecked={true} onChange={() => { setECenterChecked(!eCenterChecked) }} />
+                <input type="radio" id="e-center" name="e-horazontal" defaultChecked={true} />
                 <input type="radio" id="e-right" name="e-horazontal" />
                 <input type="radio" id="f-up" name="f-vertical" />
-                <input type="radio" id="f-middle" name="f-vertical" defaultChecked={true} onChange={() => { setFMiddleChecked(!fMiddleChecked) }} />
+                <input type="radio" id="f-middle" name="f-vertical" defaultChecked={true} />
                 <input type="radio" id="f-down" name="f-vertical" />
                 <input type="radio" id="f-left" name="f-horazontal" />
                 <input type="radio" id="f-center" name="f-horazontal" defaultChecked={true} />
-                <input type="radio" id="f-right" name="f-horazontal" onChange={() => { setFRightChecked(!fRightChecked) }} />
+                <input type="radio" id="f-right" name="f-horazontal" />
                 <input type="radio" id="g-up" name="g-vertical" defaultChecked={true} />
                 <input type="radio" id="g-middle" name="g-vertical" />
-                <input type="radio" id="g-down" name="g-vertical" onChange={() => { setGDownChecked(!gDownChecked) }} />
-                <input type="radio" id="g-left" name="g-horazontal" onChange={() => { setGleftChecked(!gLeftChecked) }} />
+                <input type="radio" id="g-down" name="g-vertical" />
+                <input type="radio" id="g-left" name="g-horazontal" />
                 <input type="radio" id="g-center" name="g-horazontal" />
                 <input type="radio" id="g-right" name="g-horazontal" defaultChecked={true} />
                 <input type="radio" id="h-up" name="h-vertical" />
                 <input type="radio" id="h-middle" name="h-vertical" />
-                <input type="radio" id="h-down" name="h-vertical" defaultChecked={true} onChange={() => { setHDownhecked(!hDownChecked) }}  />
+                <input type="radio" id="h-down" name="h-vertical" defaultChecked={true} />
                 <input type="radio" id="h-left" name="h-horazontal" defaultChecked={true} />
-                <input type="radio" id="h-center" name="h-horazontal" onChange={() => { setHCenterhecked(!hCenterChecked) }}  />
+                <input type="radio" id="h-center" name="h-horazontal" />
                 <input type="radio" id="h-right" name="h-horazontal" />
                 <div className="board" onClick={() => {
                     if (!winner) {
