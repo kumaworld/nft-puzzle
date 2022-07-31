@@ -32,7 +32,7 @@ export default function Puzzle({ nft }) {
             interval = setInterval(() => {
                 setTime((prevTime) => prevTime + 10);
             }, 10);
-        } else if (!running) {
+        } else  {
             clearInterval(interval);
         }
 

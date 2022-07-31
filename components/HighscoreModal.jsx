@@ -159,7 +159,7 @@ export default function HighscoreModal({ open, handleClose }) {
                                                 <TableCell >
                                                     <Typography sx={getTyphographyStyle(index)}>{index + 1}st</Typography>
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell sx={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                     {row.name}
                                                 </TableCell>
                                                 <TableCell >
@@ -207,7 +207,7 @@ export default function HighscoreModal({ open, handleClose }) {
                                                 <TableCell >
                                                     <Typography sx={getTyphographyStyle(index)}>{index + 1}st</Typography>
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell sx={{ maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                     {row.name}
                                                 </TableCell>
                                                 <TableCell >
