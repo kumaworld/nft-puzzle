@@ -32,7 +32,7 @@ import { Public, Panorama } from '@mui/icons-material';
 import { NUMBER_OF_PLAYERS_RANKING } from '../utils/constants';
 
 export default function HighscoreModal({ open, handleClose }) {
-    const headers = ['Name', 'Time']
+    const headers = ['','Name', 'Time']
     const [value, setValue] = useState('1');
     const router = useRouter();
 
@@ -64,6 +64,37 @@ export default function HighscoreModal({ open, handleClose }) {
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    const goldStyle = {
+        fontSize: 24,
+        color: '#FFD700'
+    }
+
+    const silverStyle = {
+        fontSize: 24,
+        color: '#C0C0C0'
+    }
+
+    const bronzeStyle = {
+        fontSize: 24,
+        color: '#967444'
+    }
+
+    const getTyphographyStyle = (index) => {
+        switch (index) {
+            case 0:
+                return goldStyle
+            case 1:
+                return silverStyle
+            case 2:
+                return bronzeStyle
+
+            default:
+                return {
+                    fontSize: 12
+                }
+        }
+    }
 
     return (
       <Dialog
@@ -121,9 +152,13 @@ export default function HighscoreModal({ open, handleClose }) {
                                         </>
                                     ) : (
                                         globalScores.length > 0 ?
-                                        globalScores.map((row) => {
+                                        globalScores.map((row, index) => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
+
+                                                <TableCell >
+                                                    <Typography sx={getTyphographyStyle(index)}>{index + 1}st</Typography>
+                                                </TableCell>
                                                 <TableCell >
                                                     {row.name}
                                                 </TableCell>
@@ -166,9 +201,12 @@ export default function HighscoreModal({ open, handleClose }) {
                                         </>
                                     ) : (
                                         scores.length > 0 ?
-                                        scores.map((row) => {
+                                        scores.map((row, index) => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
+                                                <TableCell >
+                                                    <Typography sx={getTyphographyStyle(index)}>{index + 1}st</Typography>
+                                                </TableCell>
                                                 <TableCell >
                                                     {row.name}
                                                 </TableCell>
