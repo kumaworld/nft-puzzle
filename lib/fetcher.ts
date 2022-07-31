@@ -15,13 +15,10 @@ export async function useFetch(url: string, method = HTTP_METHODS.GET, body: any
         ...(body != null && { body: JSON.stringify(body) }),
       }
     );
-    console.log(response)
 
     data = await response.json();
-    console.log(data)
 
   } catch(error) {
-    console.log(error)
     return { data, error }
   }
 

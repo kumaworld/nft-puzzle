@@ -60,10 +60,8 @@ export default function Puzzle({ nft }) {
         && document.getElementById('h-center').checked
     }
 
-
     useEffect(() => {
         if (winner) {
-            console.log(document.querySelectorAll('.board input'))
             const saveWinner = async () => {
                 setRunning(false)
 
