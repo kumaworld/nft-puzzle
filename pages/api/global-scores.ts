@@ -11,7 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const scores = await db
     .collection("globalScores")
     .find()
-    .sort({ time: -1 })
+    .sort({ time: 1 })
     .limit(NUMBER_OF_PLAYERS_RANKING)
     .toArray()
 
