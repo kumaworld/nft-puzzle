@@ -109,7 +109,7 @@ export default function HighscoreModal({ open, handleClose }) {
         <AppBar sx={{ position: 'relative' }}>
         <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Top ${NUMBER_OF_PLAYERS_RANKING} players
+            Top {NUMBER_OF_PLAYERS_RANKING} players
             </Typography>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
                 <Close />
